@@ -1,4 +1,4 @@
-# ML_coding_practice
+# ML CodeBase
 Learning how to code in Pytorch
 
 I try to code NN, ML, DL stuff from various sources as part of my learning. This replication helps me to revise easily in future and also it's a great practice to learn DL.
