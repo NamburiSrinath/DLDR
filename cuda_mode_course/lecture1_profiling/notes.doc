@@ -1,0 +1,9 @@
+1. CUDA is async i.e if we simply use Python's time module, it will measure the overhead time of the launch of kernel and not the actual time the kernel has actually taken.
+2. When calling CUDA for first time, it might distort things, so we need to warm-up!
+3. Load cpp program in Python code (use Python bindings). Easy way - load_inline in Pytorch!
+4. Triton doesn't generate .cu files. Instead they generate PTX which is CUDA assembly directly!!
+5. Block size is important for maximum performances for Triton and CUDA kernels. That's why the graph shows less speed for triton and compile versions when block size is 4
+6. Fusion is something that helps for faster code execution.
+Eg: If y = x * x * x, then instead of multiplying x and x and moving to memory and again moving back to SM and multiplying with 3rd x, if we can move all 3 x's to SM and do the multiplication there in 1 go, that's fusion (doing more than 1 operation). It's like going out and getting all the things done before returning home!
+- Having less kernels and fusing operations wherever possible is actually good!
+7. NCU - Nvidia Compute Profiler; just say ncu python train.py! This also has visual dashboards
