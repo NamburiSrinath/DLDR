@@ -10,10 +10,8 @@ I believe most of the content that comes to this repo will be technical but not 
 
 So, to sum it up - Be curious, don't stop learning and document.
 
-# ML CodeBase
-Learning how to code in Pytorch
-
-I try to code NN, ML, DL stuff from various sources as part of my learning. This replication helps me to revise easily in future and also it's a great practice to learn DL.
+As a sidenote, I've refactored my old repository (ML CodeBase) to expand the learning materials and scope. . Below is the Old ReadME
+Learning how to code in Pytorch. I try to code NN, ML, DL stuff from various sources as part of my learning. This replication helps me to revise easily in future and also it's a great practice to learn DL.
 
 1. Transformers from scratch - https://www.youtube.com/watch?v=U0s0f995w14
 2. ViT from scratch - https://www.youtube.com/watch?v=ovB0ddFtzzA
