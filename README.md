@@ -20,9 +20,10 @@ Adding new resources that I might read. Will just add whatever I find interestin
 - [ ] Stanford lecture on scaling laws https://youtu.be/9vM4p9NN0Ts?feature=shared 
 - [ ] CMU lecture on Advanced NLP - https://www.youtube.com/watch?v=MM48kc5Zq8A&list=PL8PYTP1V4I8D4BeyjwWczukWq9d8PNyZp
 - [ ] UMass lecture - https://people.cs.umass.edu/~miyyer/cs685/schedule.html
-- MLSys Stanford series - https://mlsys.stanford.edu/
+- [ ] MLSys Stanford series - https://mlsys.stanford.edu/
 - [ ] Industry related best practices - https://parlance-labs.com/education/
 - [ ] TinyML - https://hanlab.mit.edu/courses/2024-fall-65940
+- [ ] Speculative Decoding - https://speculative-decoding.github.io/
 
 ### Systems and Databases
 Learn some basics of engineering systems, databases and OS and memory stuff. This will help to better design software.
@@ -35,10 +36,22 @@ Learn some basics of engineering systems, databases and OS and memory stuff. Thi
 
 ### Blog reads
 - [ ] https://github.com/gkamradt/LLMTest_NeedleInAHaystack?tab=readme-ov-file
-- Blogs - https://www.evidentlyai.com/ml-system-design
+- [ ] Blogs - https://www.evidentlyai.com/ml-system-design
 - [ ] HuggingFace notebook https://huggingface.co/spaces/nanotron/ultrascale-playbook
 - [ ] GPUFryer - https://github.com/huggingface/gpu-fryer
 - [ ] DSPy Usecases and tutorials - https://dspy.ai/dspy-usecases/
+- [ ] Llama from scratch - https://blog.briankitano.com/llama-from-scratch/
+- [ ] Distributed finetuning - https://sumanthrh.com/post/distributed-and-efficient-finetuning/
+- [ ] How do ViTs work? - https://github.com/xxxnell/how-do-vits-work
+- [ ] Tensor puzzles - https://github.com/srush/Tensor-Puzzles
+- [ ] GPU puzzles - https://github.com/srush/GPU-Puzzles
+- [ ] Transformer puzzles - https://github.com/srush/transformer-puzzles
+- [ ] Understanding details of inference - https://kipp.ly/transformer-inference-arithmetic/
+- [ ] KV cache https://dipkumar.dev/becoming-the-unbeatable/posts/gpt-kvcache/
+- [ ] Mamba - https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-mamba-and-state
+- [ ] GPUs brrr - https://horace.io/brrr_intro.html
+- [ ] GEMM history - https://petewarden.com/2015/04/20/why-gemm-is-at-the-heart-of-deep-learning/
+- [ ] Quantization indepth - https://mohitmayank.com/a_lazy_data_science_guide/machine_learning/model_compression_quant/
 ---
 
 As a sidenote, I've refactored my old repository (ML CodeBase) to expand the learning materials and scope thus the commits can be much older. This is part of recycling efforts (haha!) 
