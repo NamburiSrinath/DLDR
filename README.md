@@ -12,6 +12,35 @@ So, to sum it up - Be curious, don't stop learning and document.
 
 ---
 
+## Additional Reads (in future)
+Adding new resources that I might read. Will just add whatever I find interesting in the meantime.
+
+### Machine Learning
+- [ ] Debugging Distributed Codebase - https://youtu.be/_8xlRgFY_-g?feature=shared 
+- [ ] Stanford lecture on scaling laws https://youtu.be/9vM4p9NN0Ts?feature=shared 
+- [ ] CMU lecture on Advanced NLP - https://www.youtube.com/watch?v=MM48kc5Zq8A&list=PL8PYTP1V4I8D4BeyjwWczukWq9d8PNyZp
+- [ ] UMass lecture - https://people.cs.umass.edu/~miyyer/cs685/schedule.html
+- MLSys Stanford series - https://mlsys.stanford.edu/
+- [ ] Industry related best practices - https://parlance-labs.com/education/
+- [ ] TinyML - https://hanlab.mit.edu/courses/2024-fall-65940
+
+### Systems and Databases
+Learn some basics of engineering systems, databases and OS and memory stuff. This will help to better design software.
+
+- [ ] OS - https://pages.cs.wisc.edu/~remzi/Classes/537/Fall2021/ 
+- [ ] Parallel Computing - https://youtu.be/V1tINV2-9p4?feature=shared 
+- [ ] What every programmer should know about memory? - https://people.freebsd.org/~lstewart/articles/cpumemory.pdf 
+- [ ] Performance Engineering Optimization - https://ocw.mit.edu/courses/6-172-performance-engineering-of-software-systems-fall-2018/video_galleries/lecture-videos/
+- [ ] CUDA Mode - https://www.youtube.com/@GPUMODE (only after completing some OS and PMPP I can understand this better I believe!)
+
+### Blog reads
+- [ ] https://github.com/gkamradt/LLMTest_NeedleInAHaystack?tab=readme-ov-file
+- Blogs - https://www.evidentlyai.com/ml-system-design
+- [ ] HuggingFace notebook https://huggingface.co/spaces/nanotron/ultrascale-playbook
+- [ ] GPUFryer - https://github.com/huggingface/gpu-fryer
+- [ ] DSPy Usecases and tutorials - https://dspy.ai/dspy-usecases/
+---
+
 As a sidenote, I've refactored my old repository (ML CodeBase) to expand the learning materials and scope thus the commits can be much older. This is part of recycling efforts (haha!) 
 Old ReadME - Learning how to code in Pytorch. I try to code NN, ML, DL stuff from various sources as part of my learning. This replication helps me to revise easily in future and also it's a great practice to learn DL.
 
