@@ -17,7 +17,7 @@ Adding new resources that I might read. Will just add whatever I find interestin
 
 ### Machine Learning
 - [ ] Debugging Distributed Codebase - https://youtu.be/_8xlRgFY_-g?feature=shared 
-- [x] Stanford lecture on scaling laws https://youtu.be/9vM4p9NN0Ts?feature=shared (refer `blog_reads_notes`)
+- [x] Stanford lecture on scaling laws https://youtu.be/9vM4p9NN0Ts?feature=shared (refer `blog_reads_notes/Yann_StanfordLecture_LLMintro.pdf`)
 - [ ] CMU lecture on Advanced NLP - https://www.youtube.com/watch?v=MM48kc5Zq8A&list=PL8PYTP1V4I8D4BeyjwWczukWq9d8PNyZp
 - [ ] UMass lecture - https://people.cs.umass.edu/~miyyer/cs685/schedule.html
 - [ ] MLSys Stanford series - https://mlsys.stanford.edu/
@@ -35,7 +35,6 @@ Learn some basics of engineering systems, databases and OS and memory stuff. Thi
 - [ ] CUDA Mode - https://www.youtube.com/@GPUMODE (only after completing some OS and PMPP I can understand this better I believe!)
 
 ### Blog reads
-- [ ] https://github.com/gkamradt/LLMTest_NeedleInAHaystack?tab=readme-ov-file
 - [ ] Blogs - https://www.evidentlyai.com/ml-system-design
 - [ ] HuggingFace notebook https://huggingface.co/spaces/nanotron/ultrascale-playbook
 - [ ] GPUFryer - https://github.com/huggingface/gpu-fryer
@@ -53,6 +52,10 @@ Learn some basics of engineering systems, databases and OS and memory stuff. Thi
 - [ ] GEMM history - https://petewarden.com/2015/04/20/why-gemm-is-at-the-heart-of-deep-learning/
 - [ ] Quantization indepth - https://mohitmayank.com/a_lazy_data_science_guide/machine_learning/model_compression_quant/
 ---
+
+### Interesting Github CODE repos
+- [ ] https://github.com/gkamradt/LLMTest_NeedleInAHaystack?tab=readme-ov-file
+- [ ] https://github.com/huggingface/search-and-learn
 
 As a sidenote, I've refactored my old repository (ML CodeBase) to expand the learning materials and scope thus the commits can be much older. This is part of recycling efforts (haha!) 
 Old ReadME - Learning how to code in Pytorch. I try to code NN, ML, DL stuff from various sources as part of my learning. This replication helps me to revise easily in future and also it's a great practice to learn DL.
