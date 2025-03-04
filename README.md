@@ -17,7 +17,7 @@ Adding new resources that I might read. Will just add whatever I find interestin
 
 ### Machine Learning
 - [ ] Debugging Distributed Codebase - https://youtu.be/_8xlRgFY_-g?feature=shared 
-- [ ] Stanford lecture on scaling laws https://youtu.be/9vM4p9NN0Ts?feature=shared 
+- [x] Stanford lecture on scaling laws https://youtu.be/9vM4p9NN0Ts?feature=shared (refer `blog_reads_notes`)
 - [ ] CMU lecture on Advanced NLP - https://www.youtube.com/watch?v=MM48kc5Zq8A&list=PL8PYTP1V4I8D4BeyjwWczukWq9d8PNyZp
 - [ ] UMass lecture - https://people.cs.umass.edu/~miyyer/cs685/schedule.html
 - [ ] MLSys Stanford series - https://mlsys.stanford.edu/
