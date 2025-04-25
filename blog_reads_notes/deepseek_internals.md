@@ -53,5 +53,10 @@ Example explanation for some
 - **Credit Assignment problem** - In RL, how to tell whether an output is good? Pick the examples which are easier to verify programatically so it'll be easier to scale!!
 - They also splitted their reward function to 2 sub-rewards - One for correctness of answer and other for reasoning structure around the answer.
 - They also have language consistency reward - If the model responds in similar language as the question, they gave small reward..this reduced the performance a little bit but this was more aligned to humans.
-![alt text](deepseek_internals_Assets/image9.png)
+![alt text](deepseek_internals_Assets/image9.png) The entire training pipeline of Deepseek R1
+- One additional step they did is "Rejection Sampling". We use RL trained model to get high-quality, large scale, logical traces that can be further used to train the model even further to improve the generalization capabilities!! Once they get this data (800k) samples, they finetune the model again using GRPO but this time to align with human preferences
+-  Small models distilled from larger models are MORE performant compared to small models training using similar pipeline of GRPO etc; The reasoning might be because large models might gain generalization capabilities which the small models will benefit from while on the other hand if we only train small models, they might not reach the capabilities in given training time! Basically to learn things, we need extra room. But once the things are learned, those parameters are less important thus can their knowledge can be distilled to smaller models. 
+- Distilling from larger models to smaller models >> training smaller models from scratch!
+- Thinking more -> Lot of cost for inference!! Scaling the thinking capabilities demands for more efficient inference strategies! 
+
 
