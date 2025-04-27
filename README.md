@@ -57,6 +57,7 @@ Learn some basics of engineering systems, databases and OS and memory stuff. Thi
 - [ ] https://github.com/gkamradt/LLMTest_NeedleInAHaystack?tab=readme-ov-file
 - [ ] https://github.com/huggingface/search-and-learn
 
+---
 As a sidenote, I've refactored my old repository (ML CodeBase) to expand the learning materials and scope thus the commits can be much older. This is part of recycling efforts (haha!) 
 Old ReadME - Learning how to code in Pytorch. I try to code NN, ML, DL stuff from various sources as part of my learning. This replication helps me to revise easily in future and also it's a great practice to learn DL.
 
