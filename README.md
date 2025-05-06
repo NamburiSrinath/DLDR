@@ -48,7 +48,7 @@ Learn some basics of engineering systems, databases and OS and memory stuff. Thi
 - [ ] Understanding details of inference - https://kipp.ly/transformer-inference-arithmetic/
 - [ ] KV cache https://dipkumar.dev/becoming-the-unbeatable/posts/gpt-kvcache/
 - [ ] Mamba - https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-mamba-and-state
-- [ ] GPUs brrr - https://horace.io/brrr_intro.html
+- [x] GPUs brrr - https://horace.io/brrr_intro.html
 - [ ] GEMM history - https://petewarden.com/2015/04/20/why-gemm-is-at-the-heart-of-deep-learning/
 - [ ] Quantization indepth - https://mohitmayank.com/a_lazy_data_science_guide/machine_learning/model_compression_quant/
 ---
