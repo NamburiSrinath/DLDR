@@ -13,5 +13,5 @@
 ![alt text](mamba_intro_assets/image5.png) Output at time `t` will be determined by how the hidden state is influencing (using `C`) and how the input is influencing (using `D`).
 ![alt text](mamba_intro_assets/image6.png) All A, B, C and D are learnable parameters! 
 ![alt text](mamba_intro_assets/image7.png) Matrix D is usually the skip-connection as we have a direct mapping from input to output! Because of that, everything except the matrix D path is considered as an State Space Model (SSM)
-![alt text](image.png) Remember that skip connection is not usually the part of the state space model, so this is usually a modified version of math we can see in papers. Also, our inputs and outputs are continuous, so it's continuous-time representation
+![alt text](mamba_intro_assets/image8.png) Remember that skip connection is not usually the part of the state space model, so this is usually a modified version of math we can see in papers. Also, our inputs and outputs are continuous, so it's continuous-time representation
 - 
