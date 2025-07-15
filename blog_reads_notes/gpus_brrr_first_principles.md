@@ -73,3 +73,32 @@ So, in summary
 - Overhead bound - Use JIT (Just in time) compilers that can reduce the overhead (tradeoff with losing flexibility), Operator fusion
 - Memory bound - Operator fusion
 - Compute bound - Use tensor cores, pay more for GPUs!
+
+---
+<b> Link: </b> https://www.thonking.ai/p/what-shapes-do-matrix-multiplications (What shapes does matmuls like?)
+
+![alt text](gpus_go_brr_assets/weird_plot.webp) 
+
+- As we increase the size of the matrices, we have more work to do as we can parallelize!!.
+- Memory access is more expensive than compute and 2 `N x N` square matrix multiplication will take `N^2 + N^2` memory reads and `N^2` memory writes (so a total of `3N**2` memory access) and `2N**3` computes. 
+
+![alt text](gpus_go_brr_assets/tiling.webp)
+- **Tile quantization:** Spinning up additional tiles just because we have some additional data left to carry out the instruction. Eg: if our tile size is 8, 32 can be done in 4 tiles (4 SMs) while 33 needs to be done using 5 tiles (5 SMs)! 
+- Tile quantization is not the only culprit. Mainly, tiling is fundamentally worse for certain memory layouts (certain matmul sizes)!!
+
+![alt text](gpus_go_brr_assets/cache_line.png)
+- Cache-line or burst-line is basically the memory elements we get access to if we want to use any (or) all of the elements. So, if we access something from cache line, try to use everything in it. Other way put, try to access minimum cache lines for ur data patterns.
+- Suppose we have 4x12 matrix and our cache-line can access 4 elements (left diagram). Now, if we keep a tile to access the first 4 columns for all the rows, that nicely aligns with the memory layout as all we need to access if 4 cache-lines just by one tile. 
+- On the other hand, if our matrix is 4x13, the memory alignment messes up (right diagram). Now, to access 4 columns in all the rows using a tile, we need to access 7 cache lines technically involving 2 tiles!!
+- So, when the matrix size divides with cache-line (which is 32 elements on a GPU), tiling fits nicely and we don't need to do unnecessary memory reads! 
+
+![alt text](gpus_go_brr_assets/wave_quantization.png)
+- At higher matrix sizes, at 128 mod 256, we see these strange stripes.
+- This basically happens because there exists points where beyond which we need to launch additional "wave" i.e # jobs needed to execute is slighytly higher than # SMs present!!
+- One wave of A100 can potentially use all of it's 108 SMs. Suppose we have N as 1792 and tile of 256x128. This will use (1792/256) * (1792/128) - 7*14 = 98 tiles (which can be run using 98 SMs) which is < 108 tiles so things will be done in 1 wave. But if it's 1793, now we need 8 * 15 = 120 tiles which needs 120 SMs so things has to be run using 2 waves. And in 2nd wave, we have lots of tiles that are not doing anything useful!!
+
+![alt text](gpus_go_brr_assets/innermost_dim.png)
+**Link** - https://www.thonking.ai/p/answer-key-what-shapes-do-matrix 
+
+- Your innermost dimension in a matmul has to be divisible by the cache-line size (32) so the memory alignment will be better!!
+- For a matrix `MxN`, if it's row-major layout, then N is the inner most dimension. If it's column-major layout, then M will be the inner most dimension. 
