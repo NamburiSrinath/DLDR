@@ -31,3 +31,21 @@
 ![alt text](mamba_intro_assets/image22.png) Applying HiPPO (to resolve long range dependencies) to SSMs (both recurrent and convolutional discretized versions) resulted in S4 i.e Structured State Space for Sequences (S4) a class of models that can handle long sequences efficiently! 
 - Mamba is an extension of S4 - the 2 major differences i.e *selective scan algorithm* to efficiently select (ir)relevant context while predicting the next token and also a *hardware-aware algorithm* which stores and processes the intermediate representation more efficiently using `kernel fusion, recomputation and parallel scan` allows in creation of selective SSMs or S6 models which can be used like self-attention in Mamba blocks.
 - SSMs and S4 fail in short to focus on relevant context or ignore irrelevant context that's needed to answer a given questions (the thing that attention-based transformers has been working on!!)
+- In SSMs - A, B, C are same for every token (Linear Time Invariant), so it doesn't do context-aware reasoning i.e to ignore or pay attention to a particular token!
+![alt text](mamba_intro_assets/image23.png) For transformers on the other hand, this is easy as they dynamically attend to different tokens i.e depending on what the input is, the attention matrix pays attention to different parts!
+![alt text](mamba_intro_assets/image24.png) Mamba is basically having more state-aware compared to S4 while not being fully state-aware like Transformer so they can still be efficient.
+- That's done by `compressing data selectively into a state`.
+![alt text](mamba_intro_assets/mamba_intro_assets/image25.png) This is done by adaptively changing the matrices the data interacts with i.e B and C are changed and $\Delta$ matrix which multiples with A is also changed to accommodate the input sequence length and batch size! Matrix A remains the same as we want the state to be static but the way it infleunced to be dynamic!
+- A smaller step size results in ignoring specific words and uses the previous context while a larger step size focuses on the input words more than the context!!
+- Now, because the matrices are dynamic, we can't use convolutional representation as that requires fixed kernel sizes. Thus we lose parallelization it provides!
+![alt text](mamba_intro_assets/mamba_intro_assets/sequence.webp) A normal way of recurrent operation. At a current step, we need previous step's output to compute so the time complexity is `O(n)`
+![alt text](mamba_intro_assets/mamba_intro_assets/image26.png) On the other hand, Mamba uses `parallel scan` algorithm which can compute the intermediate operations reducing the time complexity!
+- Dynamic matrices of B and C (to compensate for context-aware reasoning of SSMs i.e ignore focus on specific stuff) + parallel scan algorithm -> Selective Scan algorithm
+![alt text](mamba_intro_assets/image27.png) Hardware aware - Don't do unnecessary writes and reads from SRAM<->DRAM. This can be done by kernel fusing and recomputation (it's ok to not store and recompute rather than store in DRAM and read it as we are usually memory bound)
+- Discretization step with step size $\Delta$, selective scan algorithm and multiplication with C are all fused into one kernel!! 
+![alt text](mamba_intro_assets/image28.png) Mamba is basically blocks of Selective SSM with projection layers, RMS and other components from transformers. Convolution is applied before Selective SSM to prevent independent token calculations.
+- Selective SSM is 
+  * Recurrent SSM through discretization
+  * HiPPO initialization for capturing long range context dependencies for matrix A
+  * Selective scan algorithm to compress information selectively
+  * Hardware aware algorithm to speed up computation!
