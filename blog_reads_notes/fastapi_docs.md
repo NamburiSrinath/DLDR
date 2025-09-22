@@ -3,7 +3,8 @@
 
 ### Type intros
 
-
+![alt text](fastapi_assets/image.png)
+- `Optional[T]` in Python means either a T, or None. Despite the name, it does not mean a value is "optional" in the sense that you don't have to provide it, e.g. as an argument: it means the data backing the variable is optionally there - it may be there, or it may be None.
 
 ---
 ### Concurrency, Async and await
@@ -45,4 +46,18 @@ Read this indepth technical details after some background - https://fastapi.tian
 - The first path operation function will be used incase there are many functions associated with same path operator decorator.
 - General tip: Use `Enums` for predefined variables (which can be used for path parameters if needed, but make sure the type annotation is set to enum class name i.e `async def x(model_name: ModelName)`) where `class ModelName(str, Enum)` is defined.
 - Path parameter can have path inside it but it's usually difficult to test and is not standard. But one can do `@app.get("/files/{file_path:path}")` which says the `file_path` we receive will be a path. That way, when a path is passed (eg: srinath/text.txt), it will look like `/files//srinath/text.txt` (look at //)
-- **Query parameters:**
+- **Query parameters:** Any other parameters that are passed to function that are not part of `path parameters` are automatically query parameters. For eg: `@app.get('/items/') async def x(a: int = 0, b: int = 0)`, here a and b are query parameters. In this case, we need to give these as `http://127.0.0.1:8000/items/?a=10&b=10`. These are by default string and will be converted and validated according to function annotations.
+- Query parameters are optional, so their default values will be used if nothing is provided in the URL. So, `http://127.0.0.1:8000/items/?b=10` means `http://127.0.0.1:8000/items/?a=0&b=10` as that's default for a. These query parameters can be made optional parameters by giving their default value as `None`.
+- Query parameters can be of type `bool` i.e `async def x(a: bool = False)` and now `http://127.0.0.1:8000/items/` -> this means a is False, `http://127.0.0.1:8000/items/?a=10` or `http://127.0.0.1:8000/items/?a=Yes` or anyother thing will be perceived as True inside the code. 
+- ```@app.get("items/{a}") async def x(a: int, b: str, c: int = 0, d: int | None = None)``` Here a is path parameter and is required, b is query parameter and is required, c is query parameter which has a default of 0 (so it may/may not be passed) and d is a query parameter which is optional i.e if not provided it will be None.
+- **Request body:** Data sent by client (via a browser for eg) to our API. `Response body` is the data the API sends to the client. Response body is almost always present but request body might not be present i.e client can just request a path with some query parameters. 
+- To send data, use `POST` (common one) or `PUT`, `DELETE` or `PATCH`. Sending body using `GET` is hugely discouraged!! And to do that, create a class i.e pydantic data model (using `BaseModel`) and declare that as parameter's type annotation (eg: `async def x(a: Item)`) where `class Item(BaseModel): xxx` is declared with all the variables we pass.
+- We can have all the 3 - request body, path parameters and query parameters. Eg: `@app.get("items/{c}") async def x(a: int, b: Item, c: str)`
+- **Query parameters and string validations:** `async def x(a: str | None = None)` -> Here a can be either a string or a Nonetype and the default is set to None (because it's set to None, it's not a mandatory parameter) i.e because the default value is set, it's an optional parameter. The type annotation just helps for better support and doesn't determine whether it's mandatory/optional.
+- `Annotated` type annotation is used to give additional details for a parameter. And to give additional details, we can use `Query`, `Path`, `Body`, `Cookies` methods depending on what type of parameter we are dealing with. There are advantages of using Annotated wrapped around the actual methods - https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#advantages-of-annotated
+-  It's recommended to have Query inside the Annotated and if so, Query doesn't use the default and it has to be set outside -> `q: Annotated[str, Query()] = "rick"`
+- `q: str` -> Required, can be only of type string i.e can't be None. `q: str | None` -> Required, can be either a string or a None. But still they have to pass the None i.e will throw an error when not passed. `q: str | None = None` -> Not required, can be either a type string or None, and if not provided will be defaulted to None. 
+- `async def read_items(q: Annotated[list[str], Query()] = ["foo", "bar"])` -> It is possible to have a query parameter accept as a list of values with default values. If not. Now we can use it as `http://localhost:8000/items/?q=hello&q=world`. To declare a query parameter with a type of `list`, you need to explicitly use `Query`, otherwise it would be interpreted as a request body rather than query parameter.
+- After validators - Do the specific validation after Pydantic's internal validation i.e `@field_validator(mode='after')`. This is type safe as the raw/arbitrary inputs are first dealt with Pydantic and are considered better in practice compared with before validators.
+- `async def read_items(id: Annotated[str | None, AfterValidator(check_valid_id)] = None,):` So, this id will be first validated to be either a type string or None and after that it will be validated via the function `check_valid_id`.
+- 

@@ -75,7 +75,8 @@ So, in summary
 - Compute bound - Use tensor cores, pay more for GPUs!
 
 ---
-<b> Link: </b> https://www.thonking.ai/p/what-shapes-do-matrix-multiplications (What shapes does matmuls like?)
+### **What shapes does matmuls like?**
+<b> Link: </b> https://www.thonking.ai/p/what-shapes-do-matrix-multiplications 
 
 ![alt text](gpus_go_brr_assets/weird_plot.webp) 
 
