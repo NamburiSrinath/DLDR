@@ -4,9 +4,10 @@
 *tldr:* the primary reason nearly all LLM inference endpoints are nondeterministic is that the load (and thus batch-size) nondeterministically varies! for all GPUs, CPUs and TPUs this is valid.
 - Reproducing same output in LLM systems even with temperature=0 is difficult/not feasible. Temperature = 0 means we will pick highest probable token always i.e greedy sampling where the sampling is theoretically deterministic and even then we won't get same output for same question when repeated multiple times.
 - Inference using API endpoints is non-deterministic and inference using own hardware is *also* non-deterministic and several solutions has been proposed for production-level envs but the detailed rootcauses has not been studied in depth.
-    - ![alt text](determinism_assets/1.png) An example solution offered by OpenAI (https://cookbook.openai.com/examples/reproducible_outputs_with_the_seed_parameter#implementing-consistent-outputs)
-    - ![alt text](determinism_assets/sglang.png) Production-level inference engines are aware of this issue and are working from past few years (https://docs.sglang.ai/references/faq.html#the-results-are-not-deterministic-even-with-a-temperature-of-0)
-    - ![alt text](determinism_assets/vLLM.png). Another one by vLLM (https://docs.vllm.ai/en/v0.7.0/getting_started/faq.html)
+    ![alt text](determinism_assets/1.png) An example solution offered by OpenAI (https://cookbook.openai.com/examples/reproducible_outputs_with_the_seed_parameter#implementing-consistent-outputs)
+    ![alt text](determinism_assets/sglang.png) Production-level inference engines are aware of this issue and are working from past few years (https://docs.sglang.ai/references/faq.html#the-results-are-not-deterministic-even-with-a-temperature-of-0)
+    ![alt text](determinism_assets/vLLM.png) Another one by vLLM (https://docs.vllm.ai/en/v0.7.0/getting_started/faq.html)
+
 - There are lots of hypothesis which were posited. 
     - **1. "Concurrent + Floating point hypothesis"** - Floating-point non-associativity and Concurrent execution: This basically says floating-point operations at finite levels of precision and rounding errors are not associative i.e (ab)c != a(bc) and thus the output depends on which concurrent core finished the operation first!
         - For deep dive, check this paper - Give Me FP32 or Give Me Death? Challenges and Solutions for Reproducible Reasoning., https://github.com/nanomaoli/llm_reproducibility?tab=readme-ov-file
@@ -105,13 +106,16 @@ The rest of the 3 are not batch invariant kernels which involves reductions!
 
 ---
 **Additional links**: 
-- What shapes do Matmuls like - 
-- Understand how matmuls work inside the GPU
-- Atomic add
-- Reduction: What it is, different types of reductions etc;
+- What shapes do Matmuls like - https://www.thonking.ai/p/what-shapes-do-matrix-multiplications
+- Understand how matmuls work inside the GPU (this also explains tile and wave quantization) - https://docs.nvidia.com/deeplearning/performance/dl-performance-matrix-multiplication/index.html
+- Atomic functions - https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#atomic-functions
+- Reduction in parallel programming: 
+    - What it is - Simple terms (combining a lot of values to one single value) - max(), sum() etc; 
+    - Different types of reductions - 
 - FlashAttention
 - KV cache
 - Prefill and decode stage, chunked-prefills and decode-maximal batching
+- Own questions: Using own hardware and naive HF inference decode also giving different outputs! Why?
 
 
 
