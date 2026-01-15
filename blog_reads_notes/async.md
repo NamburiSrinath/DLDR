@@ -8,7 +8,7 @@
 - Do `await` on **tasks** (create tasks on coroutines using `asyncio.create_task()` and do `await asyncio.gather()`) for best event loop efficiency. awaiting on coroutines is not ideal as it will simply step inside it
 - **Example 2** - async on coroutines (read as `await coroutine`) will directly step inside the function and runs/utilizes the resources. So, if there's any sleep (real world IO) wait times inside coroutines, this will block the resources for event loop and thus works same as synchronous
 - **Example 3** - If there are no `await` inside the coroutines (which is valid), even though all tasks are created and fired at once i.e async on tasks, the resources will still be throttled by one or other coroutine because we didn't say where the loop is allowed to interrupt your function to run another task while waiting on the data (IO) or result.
-
+- TODOs: Blocking the event loop, yielding the event loop ...
 ---
 
 ## Example 1: Proper Async/Await Usage
