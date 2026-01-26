@@ -206,3 +206,122 @@ async def main():
 
 asyncio.run(main())
 ```
+
+#### Multithreading vs multiprocessing (in Python)
+- Python is multithreaded but not simultaneously multithreaded i.e 2 threads cannot simultaneously execute the same thing
+- ![alt text](python_basics/process_thread_1.png)A thread is the atomic instruction an `os` can arrange to run program. Process is the instance of a program which has the code (instructions) and relevant data. And each process will have a min of 1 thread (single threaded) or multiple (multithreaded) which has it's own stack etc; Now, different processes can share data etc; using queues and different threads also can share data using queues!
+- Threads for concurrency, processes for parallelism!
+- ![alt text](python_basics/process_thread_2.png) Python threads are concurrent (see how thread 0 and thread 1 in process 0 got interleaved) i.e async/await is under the hood i.e when thread 0 is busy to get data for eg, thread 1 is run on core 0. The image also shows that these are not parallel i.e no two threads from same process are not run at same time at any point!! That also means each thread of a process (thread 0 of process 0) cannot be executed simultaneously on multiple cores. But threads coming from different process can be run simultaneously (thread 0 of process 0 and thread 1 of process 1 for eg are run at same point of time)!!
+- This running of only 1 thread from a process at any time on cores is ensured by *GIL (Global Interpreter lock)* i.e this is like a relay *within the process* who gives permission to only 1 thread from a process at any point of time to be on cores (running) 
+- ![alt text](python_basics/process_thread_3.png) This ensures thread safety (no deadlocks), affects *simultaneous multithreading within a process* and bad to parallelize CPU bound tasks!! but IO bound tasks are hardly affected
+- ![alt text](python_basics/process_thread_4.png)
+- CPython Interpreter will make sure to handle the resource to a different thread; basically a chance to execute if the current thread has no IO request to make or if the resource time is > 15ms (very long time for programs) whichever happens sooner. To make sure things are fair for all threads in a process. But at the end, the load for all threads won't be always equal!! Now, when a thread is kicked out, there'll be some cool-off period before it is reassigned, thus that can be viewed as one source of thread loading differences
+- ![alt text](python_basics/process_thread_5.png) 4 threads or 8 threads or 16 threads..CPU bound task (this example) will do same number of function calls as Python can't run simultaneous threads!! Also, the thread allocation is assymetry i.e few threads did very less work! This is multithreading which is not useful for improving the execution
+- So, to improve execution for CPU bound tasks, one has to do multi processing. And `perf_counter` is relative to the start of process, but `time.time()` is the general one i.e not process specific
+- ![alt text](python_basics/process_thread_6.png) See how in multithreading only 1 thread was able to run i.e the rest of the cores are sitting free!! while in multiprocess all the cores are busy as some thread inside each process made sure to be on each of those physical cores!. 
+- ![alt text](python_basics/process_thread_7.png) Again, for CPU bounded tasks such as actual calculations/manipulations - multiprocessing is the way to go. For IO bounded tasks such as waiting for data from disk or database queries, waiting for URLs to resolve - multithreading is the way to go.
+- ![alt text](python_basics/process_thread_8.png)
+- As processes don't share stuff easily (they need queues/ pipes), if one process gets corrupted, other processes still run fine. Chrome takes this `process isolation` for thier tabs 
+- `ThreadPoolExecutor` does multithreading (so use for IO bound tasks) and `ProcessPoolExecutor` does multiprocessing (so use for CPU bound tasks)
+- `threading` to barebones - `thread.start()` to actually assign threads and `thread.join()` make sure the thread is done before going to next line of code! Below is an example of old way
+```python
+import threading
+import time
+
+def do_something(sec):
+    print(f"Sleeping for {sec} second(s)")
+    time.sleep()
+    print("Done sleeping")
+
+start = time.perf_counter()
+threads = []
+for _ in range(10):
+    t = threading.Thread(target=do_something, args=[2]) # sleep for 2 sec
+    t.start() # start the thread
+    threads.append(t)
+
+### Without the below 2 lines, while the above code is running, the next lines of code will also run!, comment and see the time difference
+for thread in threads:
+    thread.join()
+
+end = time.perf_counter()
+print("Finished in {end - start} sec")
+```
+- Different way of doing using `ThreadPoolExecutor`, `submit` basically schedules a function and returns the future object (a contract that says this will get the value after sometime)
+```python
+import concurrent.futures
+with concurrent.futures.ThreadPoolExecutor as executor:
+    secs = [5, 4, 3, 2, 1]
+    results_future_object = [executor.submit(do_something, sec) for sec in secs] # submit each one to one thread, `submit` returns a future object
+
+    ## Whenever a result is done i.e yielded, print the result
+    ## so, result will not come as we started, but as they got completed i.e whichever one completes first will come out
+    for f in concurrent.futures.as_completed(results_future_object):
+        print(f.result())
+```
+- Even easier way, using `map`
+```python
+import concurrent.futures
+with concurrent.futures.ThreadPoolExecutor as executor:
+    secs = [5, 4, 3, 2, 1]
+    ## map returns the actual results
+    ## map unlike `as_completed` will actually get the results as they are started. The time doesn't change compared to `submit and as_completed` but the order changes..it's like map basically waits for everything to finish before giving the actual results as map is giving iterators unlike future objects as the submit.
+    results = executor.map(do_something, secs)
+    # so, to handle exceptions, we need to do that in the for loop!! 
+    for result in results:
+        print(result)
+```
+- Below is an old way to do multiprocessing
+```python
+import multiprocessing
+import time
+
+def do_something(sec):
+    print(f"Sleeping for {sec} second(s)")
+    time.sleep()
+    print("Done sleeping")
+
+start = time.perf_counter()
+processes = []
+for _ in range(10):
+    p = multiprocessing.Process(target=do_something, args=[2]) # sleep for 2 sec
+    p.start() # start the process
+    processes.append(p)
+
+### Without the below 2 lines, while the above code is running, the next lines of code will also run!, comment and see the time difference
+for process in processes:
+    process.join()
+
+end = time.perf_counter()
+print("Finished in {end - start} sec")
+```
+- `join` makes sure that that process (or) thread on whichever it is called is done before the next line of code executes. If it's not there, the next lines run thus getting wrong time. If it's there inside the actual process for loop (`p.start`, immediately `p.join`), then it's basically synchronous code as not all processes has started at t=0!!
+- Different way of doing using `ProcessPoolExecutor`
+```python
+import concurrent.futures
+with concurrent.futures.ProcessPoolExecutor as executor:
+    secs = [5, 4, 3, 2, 1]
+    results_future_object = [executor.submit(do_something, sec) for sec in secs] # submit each one to one core, even though there might be more jobs than cores, our os will take care of it. `submit` returns a future object
+
+    ## Whenever a result is done i.e yielded, print the result
+    ## so, result will not come as we started, but as they got completed i.e whichever one completes first will come out. 
+    for f in concurrent.futures.as_completed(results_future_object):
+        print(f.result())
+```
+- Even easier way, using `map`
+```python
+import concurrent.futures
+with concurrent.futures.ProcessPoolExecutor as executor:
+    secs = [5, 4, 3, 2, 1]
+    ## map returns the actual results
+    ## map unlike `as_completed` will actually get the results as they are started. The time doesn't change compared to `submit and as_completed` but the order changes..it's like map basically waits for everything to finish before giving the actual results as map is giving iterators unlike future objects as the submit.
+    results = executor.map(do_something, secs)
+    # so, to handle exceptions, we need to do that in the for loop!! 
+    for result in results:
+        print(result)
+```
+- Multiprocessing is beneficial for IO bound tasks as well. But it's sophisticated solution (too many resources will be wastefully used) for IO bound, thus less efficient overall.
+- <b>Another very good read:</b> https://emptysqua.re/blog/why-should-async-get-all-the-love/
+- Asyncio and Threading are 2 ways to achieve concurrency!!  Multithreading uses `preemptive multitasking` (os interrupting tasks and allocating accordingly, threads don't decide for how long to run) while `asyncio` uses event loop and `cooperative multitasking` (os doesn't handle context switching and it's controlled by developer by properly yielding using `await` for IO intensive parts). Concurrency doesn't necessarily mean running at the same time. They just have overlap in their wait times!! (as these are usually IO bound ones)
+- ![alt text](python_basics/async_thread_process.png) For very high number of concurrent tasks, it's better to use `asyncio` as creating each thread has some memory cost.
+- <b> A bit advanced blog post, need reread </b>: https://yoric.github.io/post/quite-a-few-words-about-async/
