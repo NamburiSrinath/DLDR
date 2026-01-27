@@ -3,7 +3,9 @@
 ### TL;DR Notes
 
 - We can use async/await only for (almost) independent function calls such as IO, processing on different files etc; If there's dependence i.e one function needs , this won't work
-- **Coroutine** - A function which has `async` keyword (mandatory) and `await` keyword (not mandatory) inside it
+- **Coroutine** - It's a function which can be suspended at a given point (that point is known as `suspension point`) and which can be resumed from suspension point i.e all the local variables and arguments are present! 
+    - One way: A function which has `async` keyword (mandatory; to define it's asynchronous, can be stopped at somepoint) and `await` keyword (not mandatory, but that's the point where we plan to stop) inside it
+    - Coroutines can be implemented by using many ways -- `threads, yied/async/await and call/cc`
 - **Event Loop** - An infinite loop which keeps checking for any async tasks which are awaiting for resources, this is like a scheduler, manager, traffic controller which keeps track of all async tasks and allocates resources to them as and when they are free. Under the hood, this is a queue which manage tasks
 - Do `await` on **tasks** (create tasks on coroutines using `asyncio.create_task()` and do `await asyncio.gather()`) for best event loop efficiency. awaiting on coroutines is not ideal as it will simply step inside it
 - **Example 2** - async on coroutines (read as `await coroutine`) will directly step inside the function and runs/utilizes the resources. So, if there's any sleep (real world IO) wait times inside coroutines, this will block the resources for event loop and thus works same as synchronous
@@ -325,3 +327,33 @@ with concurrent.futures.ProcessPoolExecutor as executor:
 - Asyncio and Threading are 2 ways to achieve concurrency!!  Multithreading uses `preemptive multitasking` (os interrupting tasks and allocating accordingly, threads don't decide for how long to run) while `asyncio` uses event loop and `cooperative multitasking` (os doesn't handle context switching and it's controlled by developer by properly yielding using `await` for IO intensive parts). Concurrency doesn't necessarily mean running at the same time. They just have overlap in their wait times!! (as these are usually IO bound ones)
 - ![alt text](python_basics/async_thread_process.png) For very high number of concurrent tasks, it's better to use `asyncio` as creating each thread has some memory cost.
 - <b> A bit advanced blog post, need reread </b>: https://yoric.github.io/post/quite-a-few-words-about-async/
+---
+<b> Blogpost: </b> https://dmitrykandalov.com/coroutines-as-threads
+- `yield` will give control to `main` program. The coroutine might not finish the entire execution i.e the `main` might have done
+- ![alt text](python_basics/coroutine_1.png) This shows that when the control is not given back to the coroutine, `main` will complete and some part of the code inside the coroutine won't run and they showed example.
+- In the below example, because of  `while` -  that instruction and local variable is stored in stack and resumed! If you change it to `if`, only 5 will be printed.  
+
+```python
+def countdown(n):
+    print("Starting countdown...")
+    while n > 0:
+        yield n
+        n -= 1
+    print("Countdown finished!")
+
+# Using the generator
+for number in countdown(5):
+    print(number) 
+```
+- Question: In the below example, why did `Countdown finished!` got printed. Basically why did the code go to function after printing!! Is this because `main` is underneath a `coroutine` in Python? 
+``` python
+def countdown(n):
+    print("Starting countdown...")
+    yield n
+    n -= 1
+    print("Countdown finished!")
+
+# Using the generator
+for number in countdown(5):
+    print(number)
+```
