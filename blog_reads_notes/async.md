@@ -345,7 +345,7 @@ def countdown(n):
 for number in countdown(5):
     print(number) 
 ```
-- Question: In the below example, why did `Countdown finished!` got printed. Basically why did the code go to function after printing!! Is this because `main` is underneath a `coroutine` in Python? 
+- Question: In the below example, `yield` is called only once!! So, there should be a loop inside the countdown()!!  
 ``` python
 def countdown(n):
     print("Starting countdown...")
@@ -357,4 +357,10 @@ def countdown(n):
 for number in countdown(5):
     print(number)
 ```
-- Understand difference between stackful vs stackless coroutines in detail?!!
+- Understand difference between stackful vs stackless coroutines in detail? as stackless coroutines leads to function-coloring (eg in Python `await` can be done only inside `async` function and only `async` can have `await` i.e async functions can call sync ones but sync functions can't call async ones!!
+
+### Function coloring 
+<b>Link:</b> https://www.tedinski.com/2018/11/13/function-coloring.html, https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/ 
+- Function coloring is about being infectious i.e as `async` can call any function but a normal function can't call a `async` function, every function has to be written `async` even though it's normal. Or 2 separate code paths should be maintained
+- It's more on the philosophical aspects of software programmers --  ease of writing code vs maintainability!
+
