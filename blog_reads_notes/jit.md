@@ -23,7 +23,7 @@ func compile(code string) {
 }
 ```
 - Python is an interpreted language while C is a compiled language i.e C outputs a machine code file that can be natively understood by computer -> compile and run steps are fully distinct!
-![alt text](image.png)
+![alt text](jit_assets/image.png)
 - Java -> 2 steps
   - Java code to Bytecode IR (Intermediate representation)
   - Bytecode IR -> JIT compiled (this involves interpretation)
